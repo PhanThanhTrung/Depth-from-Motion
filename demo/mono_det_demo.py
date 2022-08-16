@@ -4,11 +4,23 @@ from argparse import ArgumentParser
 from mmdet3d.apis import (inference_mono_3d_detector, init_model,
                           show_result_meshlab)
 
+def get_P(calib_file):
+    """
+    Get matrix P_rect_02 (camera 2 RGB)
+    and transform to 3 x 4 matrix
+    """
+    for line in open(calib_file):
+        if 'P2' in line:
+            cam_P = line.strip().split(' ')
+            cam_P = np.asarray([float(cam_P) for cam_P in cam_P[1:]])
+            matrix = np.zeros((3, 4))
+            matrix = cam_P.reshape((3, 4))
+            return matrix
+
 
 def main():
     parser = ArgumentParser()
     parser.add_argument('image', help='image file')
-    parser.add_argument('ann', help='ann file')
     parser.add_argument('config', help='Config file')
     parser.add_argument('checkpoint', help='Checkpoint file')
     parser.add_argument(
@@ -43,4 +55,5 @@ def main():
 
 
 if __name__ == '__main__':
+    image_path = 
     main()
